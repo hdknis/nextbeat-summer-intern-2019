@@ -4,20 +4,20 @@
  * For the full copyright and license information,
  * please view the LICENSE file that was distributed with this source code.
  *@
-@import model.site.facility.SiteViewValueFacilityList
+@import model.site.facility.SiteViewValueFacilityEdit
 @import play.api.data.Form
 
-@** 施設一覧/検索 *@
-@import persistence.facility.model.FacilitySearch
-@(vv: SiteViewValueFacilityList, form: Form[FacilitySearch])(implicit messages: play.api.i18n.Messages)
+@** 施設/演習 *@
+@import persistence.facility.model.FacilityEdit
+@(vv: SiteViewValueFacilityEdit, form: Form[FacilityEdit])(implicit messages: play.api.i18n.Messages)
 @views.html.common.layout.Default(vv.layout) {
   @views.html.common.layout.ContentLayout(
-    id      = "site-facility-list",
+    id      = "site-facility-edit",
     content = tplContent
   )
 }
 
 @** テンプレート: コンテンツ *@
 @tplContent = {
- @views.html.site.facility.list._List(vv, form)
+  @views.html.site.facility.edit._Edit(vv,form)
 }

@@ -10,10 +10,21 @@ package controllers.facility
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AbstractController, MessagesControllerComponents}
 import persistence.facility.dao.FacilityDAO
+
+//formForFacility
 import persistence.facility.model.Facility.formForFacilitySearch
+import persistence.facility.model.Facility.formForFacilityEdit
+
+
 import persistence.geo.model.Location
 import persistence.geo.dao.LocationDAO
+
+//SiteViewValueFacility
 import model.site.facility.SiteViewValueFacilityList
+import model.site.facility.SiteViewValueFacilityEdit
+import model.site.facility.SiteViewValueFacilityShow
+
+
 import model.component.util.ViewValuePageLayout
 
 
@@ -42,6 +53,71 @@ class FacilityController @javax.inject.Inject()(
       Ok(views.html.site.facility.list.Main(vv, formForFacilitySearch))
     }
   }
+
+
+  /**
+    * 施設詳細ページ
+    */
+  def show(id: Long) = Action.async { implicit request =>
+    for {
+      locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+      facilityOp <- facilityDao.get(id)
+    } yield {
+      val vv = SiteViewValueFacilityShow(
+        layout     = ViewValuePageLayout(id = request.uri),
+        location   = locSeq,
+        facilitiy   = facilityOp
+      )
+      Ok(views.html.site.facility.show.Main(vv))
+    }
+  }
+
+
+  /**
+   * 施設編集
+   */
+  def edit(id: Long) = Action.async { implicit request =>
+    for {
+      locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+      facilityOp <- facilityDao.get(id)
+    } yield {
+      val vv = SiteViewValueFacilityEdit(
+        layout     = ViewValuePageLayout(id = request.uri),
+        location   = locSeq,
+        facilitiy  = facilityOp
+      )
+      Ok(views.html.site.facility.edit.Main(vv, formForFacilityEdit))
+    }
+  }
+
+
+  def update(id: Long) = Action.async { implicit request =>
+    formForFacilityEdit.bindFromRequest.fold(
+      errors => {
+         for {
+            locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+            facilityOp  <- facilityDao.get(id)
+          } yield {
+            val vv = SiteViewValueFacilityShow(
+              layout     = ViewValuePageLayout(id = request.uri),
+              location   = locSeq,
+              facilitiy  = facilityOp
+            )
+            BadRequest(views.html.site.facility.show.Main(vv))
+          }
+        },
+       form   => {
+         facilityDao.update(id,form.name,form.address,form.description)
+         for {
+          locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+          facilityOp  <- facilityDao.get(id)
+          } yield {
+            Redirect(routes.FacilityController.show(id))
+          }
+        }
+     )
+   }
+
 
   /**
    * 施設検索

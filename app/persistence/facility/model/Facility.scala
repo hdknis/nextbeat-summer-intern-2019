@@ -29,6 +29,13 @@ case class FacilitySearch(
   locationIdOpt: Option[Location.Id]
 )
 
+// 施設編集
+case class FacilityEdit(
+  name:        String,
+  address:     String,
+  description: String,
+)
+
 // コンパニオンオブジェクト
 //~~~~~~~~~~~~~~~~~~~~~~~~~~
 object Facility {
@@ -41,6 +48,13 @@ object Facility {
     mapping(
       "locationId" -> optional(text),
     )(FacilitySearch.apply)(FacilitySearch.unapply)
+  )
+  val formForFacilityEdit = Form(
+    mapping(
+      "name"        -> nonEmptyText,
+      "address"     -> nonEmptyText,
+      "description" -> nonEmptyText
+    )(FacilityEdit.apply)(FacilityEdit.unapply)
   )
 }
 

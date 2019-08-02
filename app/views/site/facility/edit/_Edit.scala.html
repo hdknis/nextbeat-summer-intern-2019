@@ -1,0 +1,41 @@
+@*
+ * This file is part of the Nextbeat services.
+ *
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ *@
+@import views.html.helper
+@import model.site.facility.SiteViewValueFacilityEdit
+@import play.api.data.Form
+
+@import persistence.facility.model.FacilityEdit
+@(vv: SiteViewValueFacilityEdit, form: Form[FacilityEdit])(implicit messages: play.api.i18n.Messages)
+
+@** 施設検索一覧 *@
+@views.html.common.layout.InnerContent("site-app-new-user-form", "content") {
+  @** --[ 見出し ]---------------------------------------------------------- *@
+  <h3 class="content__section header">
+    <span class="header__title">施設一覧</span>
+  </h3>
+
+  @** --[ 検索フォーム ]---------------------------------------------------------- *@
+  <div class="content__section form">
+    @helper.form(action = controllers.facility.routes.FacilityController.update(vv.facilitiy.get.id.get)) {
+
+      @** 都道府県 *@
+      <div class="form__section pref inline">
+      @vv.facilitiy.get.name
+        @helper.inputText(form("name"),         'placeholder -> vv.facilitiy.get.name)
+        @helper.inputText(form("address"),      'placeholder -> vv.facilitiy.get.address)
+        @helper.inputText(form("description"),  'placeholder -> vv.facilitiy.get.description)
+      </div>
+
+      @** 登録ボタン *@
+      <div class="form__section submit inline">
+        <button class="button" type="submit">
+          <span class="submit__text">登録</span>
+        </button>
+      </div>
+    }
+  </div>
+}

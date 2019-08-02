@@ -37,6 +37,17 @@ class FacilityDAO @javax.inject.Inject()(
         .result.headOption
     }
 
+ /**
+   * 施設を編集
+   */
+  def update(id: Long,name: String,address: String,description: String) =
+    db.run {
+      slick
+        .filter(_.id === id)
+        .map(p => (p.name, p.address, p.description))
+        .update((name,address,description))
+  }
+
   /**
    * 施設を全件取得する
    */
