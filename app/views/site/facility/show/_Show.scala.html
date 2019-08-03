@@ -42,9 +42,9 @@
                   <button class="button" type="submit">
                     <a href="../edit/@vv.facilitiy.get.id"><span class="submit__text">編集する</span></a>
                   </button>
-                  <button class="button" type="submit">
-                    <a href="../delete/@vv.facilitiy.get.id"><span class="submit__text">削除する</span></a>
-                  </button>
+                    @helper.form(controllers.facility.routes.FacilityController.delete(vv.facilitiy.get.id.get)) {
+                      <input type="submit" value="削除" class="submit__text"/>
+                    }
                 </div>
               </div>
             </section>

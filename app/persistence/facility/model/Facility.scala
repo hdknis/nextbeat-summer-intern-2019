@@ -49,6 +49,20 @@ object Facility {
       "locationId" -> optional(text),
     )(FacilitySearch.apply)(FacilitySearch.unapply)
   )
+
+  val formForFacilityAdd = Form(
+    mapping(
+      "locationId"  -> nonEmptyText,
+      "name"        -> nonEmptyText,
+      "address"     -> nonEmptyText,
+      "description" -> nonEmptyText
+    )(Function.untupled(
+      t => Facility(None, t._1, t._2, t._3, t._4)
+    ))(Facility.unapply(_).map(
+      t => (t._2, t._3, t._4, t._5)
+    ))
+  )
+
   val formForFacilityEdit = Form(
     mapping(
       "name"        -> nonEmptyText,

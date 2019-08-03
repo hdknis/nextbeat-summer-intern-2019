@@ -13,6 +13,7 @@ import persistence.facility.dao.FacilityDAO
 
 //formForFacility
 import persistence.facility.model.Facility.formForFacilitySearch
+import persistence.facility.model.Facility.formForFacilityAdd
 import persistence.facility.model.Facility.formForFacilityEdit
 
 
@@ -21,6 +22,7 @@ import persistence.geo.dao.LocationDAO
 
 //SiteViewValueFacility
 import model.site.facility.SiteViewValueFacilityList
+import model.site.facility.SiteViewValueFacilityAdd
 import model.site.facility.SiteViewValueFacilityEdit
 import model.site.facility.SiteViewValueFacilityShow
 
@@ -72,6 +74,44 @@ class FacilityController @javax.inject.Inject()(
     }
   }
 
+  /**
+    * 施設追加ページ
+    */
+  def add = Action.async { implicit request =>
+    for {
+      locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+    } yield {
+      val vv = SiteViewValueFacilityAdd(
+        layout     = ViewValuePageLayout(id = request.uri),
+        location   = locSeq
+      )
+      Ok(views.html.site.facility.add.Main(vv, formForFacilityAdd))
+    }
+  }
+
+
+  def create = Action.async { implicit request =>
+    formForFacilityAdd.bindFromRequest.fold(
+      errors => {
+         for {
+            locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+         } yield {
+            val vv = SiteViewValueFacilityAdd(
+              layout     = ViewValuePageLayout(id = request.uri),
+              location   = locSeq
+            )
+            Ok(views.html.site.facility.add.Main(vv, formForFacilityAdd))
+         }
+        },
+       form   => {
+         for {
+           _ <- facilityDao.add(form)
+          } yield {
+            Redirect(routes.FacilityController.list)
+          }
+        }
+     )
+  }
 
   /**
    * 施設編集
@@ -117,6 +157,20 @@ class FacilityController @javax.inject.Inject()(
         }
      )
    }
+
+
+   /**
+   * 施設削除
+   */
+   def delete(id: Long) = Action.async { implicit request =>
+        println("こんにちは１")
+      for {
+        _ <- facilityDao.delete(id)
+      } yield {
+        println("こんにちは")
+        Redirect(routes.FacilityController.list)
+      }
+    }
 
 
   /**
