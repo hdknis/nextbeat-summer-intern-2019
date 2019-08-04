@@ -25,10 +25,17 @@
       @** 都道府県 *@
       <div class="form__section pref inline">
       @vv.organization.get.name_en
-        @helper.inputText(form("name_kanji"),           'placeholder -> "施設名")
-        @helper.inputText(form("name_hurigana"),        'placeholder -> "施設名(ひらがな)")
-        @helper.inputText(form("name_en"),              'placeholder -> "施設名(英語)")
-        @helper.inputText(form("address"),              'placeholder -> "施設住所")
+        @helper.select(
+          field   = form("locationId"),
+          options = vv.location.map(v => (v.id, v.namePref)),
+          '_label           -> "都道府県",
+          '_default         -> "未選択",
+          '_showConstraints -> false
+        )
+        @helper.inputText(form("name_kanji"),     '_label   -> "名前(漢字)",    'placeholder -> "施設名")
+        @helper.inputText(form("name_hurigana"),  '_label   -> "名前(ひらがな)",      'placeholder -> "施設名(ひらがな)")
+        @helper.inputText(form("name_en"),        '_label   -> "名前(英語)",      'placeholder -> "施設名(英語)")
+        @helper.inputText(form("address"),        '_label   -> "名前(住所)",      'placeholder -> "施設住所")
       @** 編集ボタン *@
       <div class="form__section submit inline">
         <button class="button" type="submit">

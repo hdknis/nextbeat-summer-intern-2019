@@ -113,7 +113,7 @@ class OrganizationController @javax.inject.Inject()(
   }
 
   /**
-   * 施設編集
+   * 組織編集
    */
   def edit(id: Long) = Action.async { implicit request =>
     for {
@@ -146,7 +146,7 @@ class OrganizationController @javax.inject.Inject()(
           }
         },
        form   => {
-         organizationDao.update(id,form.name_kanji ,form.name_hurigana,form.name_en,form.address)
+         organizationDao.update(id,form.locationId,form.name_kanji ,form.name_hurigana,form.name_en,form.address)
          for {
           locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
           organizationOp  <- organizationDao.get(id)
@@ -159,14 +159,12 @@ class OrganizationController @javax.inject.Inject()(
 
 
    /**
-   * 施設削除
+   * 組織削除
    */
    def delete(id: Long) = Action.async { implicit request =>
-        println("こんにちは１")
       for {
         _ <- organizationDao.delete(id)
       } yield {
-        println("こんにちは")
         Redirect(routes.OrganizationController.list)
       }
     }

@@ -54,12 +54,12 @@ class OrganizationDAO @javax.inject.Inject()(
  /**
    * 施設を編集
    */
-  def update(id: Long,name_kanji: String ,name_hurigana: String ,name_en: String ,address: String) =
+  def update(id: Long, locationId: String,name_kanji: String ,name_hurigana: String ,name_en: String ,address: String) =
     db.run {
       slick
         .filter(_.id === id)
-        .map(p => (p.name_kanji, p.name_hurigana, p.name_en,p.address))
-        .update((name_kanji,name_hurigana,name_en,address))
+        .map(p => (p.locationId,p.name_kanji, p.name_hurigana, p.name_en,p.address,p.updatedAt))
+        .update((locationId,name_kanji,name_hurigana,name_en,address,LocalDateTime.now))
   }
 
   /**

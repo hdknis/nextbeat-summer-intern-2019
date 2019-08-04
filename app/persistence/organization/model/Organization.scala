@@ -27,6 +27,7 @@ case class Organization(
 
 // 施設編集
 case class OrganizationEdit(
+  locationId:     Location.Id,
   name_kanji:     String,
   name_hurigana:  String,
   name_en:        String,
@@ -44,11 +45,11 @@ object Organization {
    // --[ フォーム定義 ]---------------------------------------------------------
   val formForOrganizationAdd = Form(
     mapping(
-      "locationId"     -> nonEmptyText,
-      "name_kanji"     -> nonEmptyText,
-      "name_hurigana"  -> nonEmptyText,
-      "name_en"        -> nonEmptyText,
-      "address"        -> nonEmptyText
+      "locationId"      -> nonEmptyText,
+      "name_kanji"      -> nonEmptyText,
+      "name_hurigana"   -> nonEmptyText,
+      "name_en"         -> nonEmptyText,
+      "address"         -> nonEmptyText
     )(Function.untupled(
       t => Organization(None, t._1, t._2, t._3, t._4,t._5)
     ))(Organization.unapply(_).map(
@@ -58,10 +59,11 @@ object Organization {
 
   val formForOrganizationEdit = Form(
     mapping(
+      "locationId"      -> nonEmptyText,
       "name_kanji"      -> nonEmptyText,
-      "name_hurigana"  -> nonEmptyText,
-      "name_en"        -> nonEmptyText,
-      "address"        -> nonEmptyText
+      "name_hurigana"   -> nonEmptyText,
+      "name_en"         -> nonEmptyText,
+      "address"         -> nonEmptyText
     )(OrganizationEdit.apply)(OrganizationEdit.unapply)
   )
 }
