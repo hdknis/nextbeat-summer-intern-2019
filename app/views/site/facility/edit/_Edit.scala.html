@@ -25,9 +25,16 @@
       @** 都道府県 *@
       <div class="form__section pref inline">
       @vv.facilitiy.get.name
-        @helper.inputText(form("name"),         'placeholder -> vv.facilitiy.get.name)
-        @helper.inputText(form("address"),      'placeholder -> vv.facilitiy.get.address)
-        @helper.inputText(form("description"),  'placeholder -> vv.facilitiy.get.description)
+        @helper.select(
+          field   = form("locationId"),
+          options = vv.location.map(v => (v.id, v.namePref)),
+          '_label           -> "都道府県",
+          '_default         -> "未選択",
+          '_showConstraints -> false
+        )
+        @helper.inputText(form("name"),         '_label   -> "名前",        'placeholder -> "施設名")
+        @helper.inputText(form("address"),      '_label   -> "住所",        'placeholder -> "施設住所")
+        @helper.inputText(form("description"),  '_label   -> "施設の説明",   'placeholder -> "施設の説明")
       </div>
 
       @** 登録ボタン *@

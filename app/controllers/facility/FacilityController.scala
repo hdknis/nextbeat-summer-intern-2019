@@ -147,10 +147,8 @@ class FacilityController @javax.inject.Inject()(
           }
         },
        form   => {
-         facilityDao.update(id,form.name,form.address,form.description)
          for {
-          locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
-          facilityOp  <- facilityDao.get(id)
+            _ <- facilityDao.update(id, form.locationId,form.name, form.address, form.description)
           } yield {
             Redirect(routes.FacilityController.show(id))
           }
@@ -163,7 +161,6 @@ class FacilityController @javax.inject.Inject()(
    * 施設削除
    */
    def delete(id: Long) = Action.async { implicit request =>
-        println("こんにちは１")
       for {
         _ <- facilityDao.delete(id)
       } yield {

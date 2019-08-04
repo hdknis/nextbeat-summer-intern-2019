@@ -31,6 +31,7 @@ case class FacilitySearch(
 
 // 施設編集
 case class FacilityEdit(
+  locationId:  Location.Id,
   name:        String,
   address:     String,
   description: String,
@@ -65,6 +66,7 @@ object Facility {
 
   val formForFacilityEdit = Form(
     mapping(
+      "locationId"  -> nonEmptyText,
       "name"        -> nonEmptyText,
       "address"     -> nonEmptyText,
       "description" -> nonEmptyText

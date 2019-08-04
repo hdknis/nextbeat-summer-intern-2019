@@ -54,12 +54,12 @@ class FacilityDAO @javax.inject.Inject()(
  /**
    * 施設を編集
    */
-  def update(id: Long,name: String,address: String,description: String) =
+  def update(id: Facility.Id, locationId: String,name: String, address: String, description: String) =
     db.run {
       slick
         .filter(_.id === id)
-        .map(p => (p.name, p.address, p.description))
-        .update((name,address,description))
+        .map(p => (p.locationId,p.name, p.address, p.description,p.updatedAt))
+        .update((locationId, name, address, description,LocalDateTime.now))
   }
 
   /**
