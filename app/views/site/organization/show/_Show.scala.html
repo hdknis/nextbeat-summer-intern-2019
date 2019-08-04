@@ -1,0 +1,66 @@
+@*
+ * This file is part of the Nextbeat services.
+ *
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ *@
+@import model.site.organization.SiteViewValueOrganizationShow
+@import play.api.data.Form
+@(vv: SiteViewValueOrganizationShow)(implicit messages: play.api.i18n.Messages)
+
+@** 組織詳細 *@
+@views.html.common.layout.InnerContent("site-app-new-user-form", "content") {
+  @** --[ 見出し ]---------------------------------------------------------- *@
+  <h3 class="content__section header">
+    <span class="header__title">組織番号@vv.organization.get.id</span>
+  </h3>
+
+  @** --[ 一覧 ]-------------------------------------------------------- *@
+  <div class="content__section content">
+      <article class="organization-list-item">
+          <div class="item-panel__wrapper">
+            <header class="organization-item__header">
+              <div class="name">
+               @vv.organization.get.name_kanji
+              </div>
+            </header>
+            <section class="organization-item__content">
+              <div>
+                <div class="item-panel__content">
+                  <div class="address">
+                    <label class="inline">住所:</label>
+                    <p class="inline">
+                       @vv.organization.get.address
+                    </p>
+                  </div>
+                   <div class="description">
+                    <label class="inline">名前(漢字):</label>
+                    <p class="inline">
+                       @vv.organization.get.name_kanji
+                    </p>
+                  </div>
+                  <div class="description">
+                    <label class="inline">名前(ひらがな):</label>
+                    <p class="inline">
+                       @vv.organization.get.name_hurigana
+                    </p>
+                  </div>
+                   <div class="description">
+                    <label class="inline">名前(英語):</label>
+                    <p class="inline">
+                       @vv.organization.get.name_en
+                    </p>
+                  </div>
+                  <button class="button" type="submit">
+                    <a href="../edit/@vv.organization.get.id"><span class="submit__text">編集する</span></a>
+                  </button>
+                    @helper.form(controllers.organization.routes.OrganizationController.delete(vv.organization.get.id.get)) {
+                      <input type="submit" value="削除" class="submit__text"/>
+                    }
+                </div>
+              </div>
+            </section>
+          </div>
+      </article>
+  </div>
+}

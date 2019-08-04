@@ -1,0 +1,65 @@
+@*
+ * This file is part of the Nextbeat services.
+ *
+ * For the full copyright and license information,
+ * please view the LICENSE file that was distributed with this source code.
+ *@
+@import views.html.helper
+@import model.site.organization.SiteViewValueOrganizationList
+@import play.api.data.Form
+@(vv: SiteViewValueOrganizationList)(implicit messages: play.api.i18n.Messages)
+
+@** 組織一覧 *@
+@views.html.common.layout.InnerContent("site-app-new-user-form", "content") {
+  @** --[ 見出し ]---------------------------------------------------------- *@
+  <h3 class="content__section header">
+    <span class="header__title">組織一覧</span>
+  </h3>
+
+  @** --[ 一覧 ]-------------------------------------------------------- *@
+  <div class="content__section content form">
+    @for(organization <- vv.organizations) {
+      <article class="organization-list-item">
+        <a href="show/@organization.id">
+          <div class="item-panel__wrapper">
+            <header class="organization-item__header">
+              <div class="name">
+                @organization.name_en
+              </div>
+            </header>
+            <section class="organization-item__content">
+              <div>
+                <div class="item-panel__content">
+                  <div class="address">
+                    <label class="inline">住所:</label>
+                    <p class="inline">
+                      @organization.address
+                    </p>
+                  </div>
+                  <div class="description">
+                    <label class="inline">名前(漢字):</label>
+                    <p class="inline">
+                      @organization.name_kanji
+                    </p>
+                  </div>
+                  <div class="description">
+                    <label class="inline">名前(ひらがな):</label>
+                    <p class="inline">
+                      @organization.name_hurigana
+                    </p>
+                  </div>
+                   <div class="description">
+                    <label class="inline">名前(英語):</label>
+                    <p class="inline">
+                      @organization.name_en
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </a>
+      </article>
+    }
+  </div>
+}

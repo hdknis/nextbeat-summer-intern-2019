@@ -25,6 +25,14 @@ case class Organization(
   createdAt:      LocalDateTime = LocalDateTime.now   // データ作成日
 )
 
+// 施設編集
+case class OrganizationEdit(
+  name_kanji:     String,
+  name_hurigana:  String,
+  name_en:        String,
+  address:        String,
+)
+
 
 // コンパニオンオブジェクト
 //~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,6 +41,28 @@ object Organization {
   // --[ 管理ID ]---------------------------------------------------------------
   type Id = Long
 
-  // --[ フォーム定義 ]---------------------------------------------------------
+   // --[ フォーム定義 ]---------------------------------------------------------
+  val formForOrganizationAdd = Form(
+    mapping(
+      "locationId"     -> nonEmptyText,
+      "name_kanji"     -> nonEmptyText,
+      "name_hurigana"  -> nonEmptyText,
+      "name_en"        -> nonEmptyText,
+      "address"        -> nonEmptyText
+    )(Function.untupled(
+      t => Organization(None, t._1, t._2, t._3, t._4,t._5)
+    ))(Organization.unapply(_).map(
+      t => (t._2, t._3, t._4, t._5,t._6)
+    ))
+  )
+
+  val formForOrganizationEdit = Form(
+    mapping(
+      "name_kanji"      -> nonEmptyText,
+      "name_hurigana"  -> nonEmptyText,
+      "name_en"        -> nonEmptyText,
+      "address"        -> nonEmptyText
+    )(OrganizationEdit.apply)(OrganizationEdit.unapply)
+  )
 }
 
