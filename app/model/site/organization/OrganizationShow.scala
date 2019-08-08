@@ -8,7 +8,6 @@
 package model.site.organization
 
 import model.component.util.ViewValuePageLayout
-import persistence.geo.model.Location
 import persistence.organization.model.Organization
 import persistence.facility.model.Facility
 
@@ -16,7 +15,6 @@ import persistence.facility.model.Facility
 //~~~~~~~~~~~~~~~~~~~~~
 case class SiteViewValueOrganizationShow(
   layout:        ViewValuePageLayout,
-  location:      Seq[Location],
   organization:  Option[Organization],
   facilities:    Seq[Facility]
 )

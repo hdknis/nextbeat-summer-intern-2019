@@ -65,12 +65,10 @@ class FacilityController @javax.inject.Inject()(
     */
   def show(id: Long) = Action.async { implicit request =>
     for {
-      locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
-      facilityOp <- facilityDao.get(id)
+      facilityOp  <- facilityDao.get(id)
     } yield {
       val vv = SiteViewValueFacilityShow(
         layout     = ViewValuePageLayout(id = request.uri),
-        location   = locSeq,
         facilitiy   = facilityOp
       )
       Ok(views.html.site.facility.show.Main(vv))
@@ -90,6 +88,7 @@ class FacilityController @javax.inject.Inject()(
         location      = locSeq,
         organization  = orgSeq
       )
+      println(vv)
       Ok(views.html.site.facility.add.Main(vv, formForFacilityAdd))
     }
   }
@@ -142,12 +141,10 @@ class FacilityController @javax.inject.Inject()(
     formForFacilityEdit.bindFromRequest.fold(
       errors => {
          for {
-            locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
             facilityOp  <- facilityDao.get(id)
           } yield {
             val vv = SiteViewValueFacilityShow(
               layout     = ViewValuePageLayout(id = request.uri),
-              location   = locSeq,
               facilitiy  = facilityOp
             )
             BadRequest(views.html.site.facility.show.Main(vv))

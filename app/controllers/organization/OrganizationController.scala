@@ -48,12 +48,10 @@ class OrganizationController @javax.inject.Inject()(
     */
   def list = Action.async { implicit request =>
     for {
-      locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
       organizationSeq <- organizationDao.findAll
     } yield {
       val vv = SiteViewValueOrganizationList(
         layout     = ViewValuePageLayout(id = request.uri),
-        location   = locSeq,
         organizations = organizationSeq
       )
       Ok(views.html.site.organization.list.Main(vv))
@@ -66,13 +64,11 @@ class OrganizationController @javax.inject.Inject()(
     */
   def show(id: Int) = Action.async { implicit request =>
     for {
-      locSeq          <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
-      organizationOp  <- organizationDao.get(id)
+      organizationOp        <- organizationDao.get(id)
       facilitySeq_orgId     <- daoFacility.filterByOrganizationIds(id)
     } yield {
       val vv = SiteViewValueOrganizationShow(
         layout         = ViewValuePageLayout(id = request.uri),
-        location       = locSeq,
         organization   = organizationOp,
         facilities     = facilitySeq_orgId
       )
@@ -81,7 +77,7 @@ class OrganizationController @javax.inject.Inject()(
   }
 
   /**
-    * 施設追加ページ
+    * 組織追加ページ
     */
   def add = Action.async { implicit request =>
     for {
@@ -96,6 +92,9 @@ class OrganizationController @javax.inject.Inject()(
   }
 
 
+  /**
+    * 組織追加処理
+    */
   def create = Action.async { implicit request =>
     formForOrganizationAdd.bindFromRequest.fold(
       errors => {
@@ -120,12 +119,12 @@ class OrganizationController @javax.inject.Inject()(
   }
 
   /**
-   * 組織編集
+   * 組織編集ページ
    */
   def edit(id: Int) = Action.async { implicit request =>
     for {
-      locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
-      organizationOp <- organizationDao.get(id)
+      locSeq                <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+      organizationOp        <- organizationDao.get(id)
       facilitySeq_orgId     <- daoFacility.filterByOrganizationIds(id)
     } yield {
       val vv = SiteViewValueOrganizationEdit(
@@ -139,19 +138,20 @@ class OrganizationController @javax.inject.Inject()(
   }
 
 
+  /**
+    * 組織編集処理
+    */
   def update(id: Int) = Action.async { implicit request =>
     formForOrganizationEdit.bindFromRequest.fold(
       errors => {
          for {
-            locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
-            organizationOp  <- organizationDao.get(id)
-            facilitySeq_orgId     <- daoFacility.filterByOrganizationIds(id)
+            organizationOp      <- organizationDao.get(id)
+            facilitySeq_orgId   <- daoFacility.filterByOrganizationIds(id)
           } yield {
             val vv = SiteViewValueOrganizationShow(
               layout          = ViewValuePageLayout(id = request.uri),
-              location        = locSeq,
               organization    = organizationOp,
-              facilities     = facilitySeq_orgId
+              facilities      = facilitySeq_orgId
             )
             BadRequest(views.html.site.organization.show.Main(vv))
           }
@@ -159,7 +159,7 @@ class OrganizationController @javax.inject.Inject()(
        form   => {
          organizationDao.update(id,form.locationId,form.name_kanji ,form.name_hurigana,form.name_en,form.address)
          for {
-          locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+          locSeq          <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
           organizationOp  <- organizationDao.get(id)
           } yield {
             Redirect(routes.OrganizationController.show(id))
@@ -170,7 +170,7 @@ class OrganizationController @javax.inject.Inject()(
 
 
    /**
-   * 組織削除
+   * 組織削除処理
    */
    def delete(id: Int) = Action.async { implicit request =>
       for {
@@ -178,5 +178,5 @@ class OrganizationController @javax.inject.Inject()(
       } yield {
         Redirect(routes.OrganizationController.list)
       }
-    }
+   }
 }
