@@ -126,11 +126,13 @@ class OrganizationController @javax.inject.Inject()(
     for {
       locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
       organizationOp <- organizationDao.get(id)
+      facilitySeq_orgId     <- daoFacility.filterByOrganizationIds(id)
     } yield {
       val vv = SiteViewValueOrganizationEdit(
         layout          = ViewValuePageLayout(id = request.uri),
         location        = locSeq,
-        organization    = organizationOp
+        organization    = organizationOp,
+        facilities      = facilitySeq_orgId
       )
       Ok(views.html.site.organization.edit.Main(vv, formForOrganizationEdit))
     }
@@ -143,11 +145,13 @@ class OrganizationController @javax.inject.Inject()(
          for {
             locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
             organizationOp  <- organizationDao.get(id)
+            facilitySeq_orgId     <- daoFacility.filterByOrganizationIds(id)
           } yield {
             val vv = SiteViewValueOrganizationShow(
               layout          = ViewValuePageLayout(id = request.uri),
               location        = locSeq,
-              organization    = organizationOp
+              organization    = organizationOp,
+              facilities     = facilitySeq_orgId
             )
             BadRequest(views.html.site.organization.show.Main(vv))
           }

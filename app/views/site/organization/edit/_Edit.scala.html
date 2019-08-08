@@ -18,12 +18,12 @@
     <span class="header__title">組織編集</span>
   </h3>
 
-  @** --[ 検索フォーム ]---------------------------------------------------------- *@
+  @** --[ 編集フォーム ]---------------------------------------------------------- *@
   <div class="content__section form">
     @helper.form(action = controllers.organization.routes.OrganizationController.update(vv.organization.get.id.get)) {
 
       @** 都道府県 *@
-      <div class="form__section pref inline">
+  <div class="form__section pref inline">
       @vv.organization.get.name_en
         @helper.select(
           field   = form("locationId"),
@@ -32,8 +32,8 @@
           '_default         -> "未選択",
           '_showConstraints -> false
         )
-        @helper.inputText(form("name_kanji"),     '_label   -> "名前(漢字)",    'placeholder -> "施設名")
-        @helper.inputText(form("name_hurigana"),  '_label   -> "名前(ひらがな)",      'placeholder -> "施設名(ひらがな)")
+        @helper.inputText(form("name_kanji"),     '_label   -> "名前(漢字)",      'placeholder -> "施設名")
+        @helper.inputText(form("name_hurigana"),  '_label   -> "名前(ひらがな)",   'placeholder -> "施設名(ひらがな)")
         @helper.inputText(form("name_en"),        '_label   -> "名前(英語)",      'placeholder -> "施設名(英語)")
         @helper.inputText(form("address"),        '_label   -> "名前(住所)",      'placeholder -> "施設住所")
       @** 編集ボタン *@
@@ -44,4 +44,58 @@
       </div>
     }
   </div>
+   @** --[ 組織に紐づいた施設一覧 ]-------------------------------------------------------- *@
+      <div>
+        @vv.organization.get.name_en
+        に紐づいた施設一覧
+      </div>
+        @for(facility <- vv.facilities) {
+      <article class="facility-list-item">
+        <a href="show/@facility.id">
+          <div class="item-panel__wrapper">
+            <header class="facility-item__header">
+              <div class="name">
+                @facility.name
+              </div>
+            </header>
+            <section class="facility-item__content">
+              <div>
+                <div class="item-panel__content">
+                  <div class="address">
+                    <label class="inline">住所:</label>
+                    <p class="inline">
+                      @facility.address
+                    </p>
+                  </div>
+                  <div class="description">
+                    <label class="inline">備考:</label>
+                    <p class="inline">
+                      @facility.description
+                    </p>
+                  </div>
+                  <div class="description">
+                    <label class="inline">変更された時間</label>
+                    <p class="inline">
+                      @facility.updatedAt
+                    </p>
+                  </div>
+                  <div class="description">
+                    <label class="inline">作られた時間</label>
+                    <p class="inline">
+                      @facility.createdAt
+                    </p>
+                  </div>
+                    @helper.form(controllers.facility.routes.FacilityController.delete(facility.id.get)) {
+                      <input type="submit" value="削除" class="submit__text"/>
+                    }
+                </div>
+              </div>
+                 @helper.form(controllers.facility.routes.FacilityController.add) {
+                      <input type="submit" value="facilityを追加" class="submit__text"/>
+                }
+            </section>
+          </div>
+        </a>
+      </article>
+    }
 }
