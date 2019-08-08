@@ -31,6 +31,12 @@
           '_default         -> "未選択",
           '_showConstraints -> false
         )
+        @helper.inputText(
+           form("organizationId"),
+           '_label ->"組織id",
+           'type -> "number",
+           'placeholder -> "組織id"
+        )
         @helper.inputText(form("name"),         '_label   -> "名前",        'placeholder -> "施設名")
         @helper.inputText(form("address"),      '_label   -> "住所",        'placeholder -> "施設住所")
         @helper.inputText(form("description"),  '_label   -> "施設の説明",   'placeholder -> "施設の説明")

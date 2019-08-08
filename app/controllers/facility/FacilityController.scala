@@ -19,6 +19,8 @@ import persistence.facility.model.Facility.formForFacilityEdit
 
 import persistence.geo.model.Location
 import persistence.geo.dao.LocationDAO
+import persistence.organization.model.Organization
+import persistence.organization.dao.OrganizationDAO
 
 //SiteViewValueFacility
 import model.site.facility.SiteViewValueFacilityList
@@ -33,8 +35,9 @@ import model.component.util.ViewValuePageLayout
 // 施設
 //~~~~~~~~~~~~~~~~~~~~~
 class FacilityController @javax.inject.Inject()(
-  val facilityDao: FacilityDAO,
-  val daoLocation: LocationDAO,
+  val facilityDao:     FacilityDAO,
+  val daoLocation:     LocationDAO,
+  val daoOrganization: OrganizationDAO,
   cc: MessagesControllerComponents
 ) extends AbstractController(cc) with I18nSupport {
   implicit lazy val executionContext = defaultExecutionContext
@@ -80,10 +83,12 @@ class FacilityController @javax.inject.Inject()(
   def add = Action.async { implicit request =>
     for {
       locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+      orgSeq      <- daoOrganization.findAll
     } yield {
       val vv = SiteViewValueFacilityAdd(
-        layout     = ViewValuePageLayout(id = request.uri),
-        location   = locSeq
+        layout        = ViewValuePageLayout(id = request.uri),
+        location      = locSeq,
+        organization  = orgSeq
       )
       Ok(views.html.site.facility.add.Main(vv, formForFacilityAdd))
     }
@@ -95,10 +100,12 @@ class FacilityController @javax.inject.Inject()(
       errors => {
          for {
             locSeq      <- daoLocation.filterByIds(Location.Region.IS_PREF_ALL)
+            orgSeq      <- daoOrganization.findAll
          } yield {
             val vv = SiteViewValueFacilityAdd(
               layout     = ViewValuePageLayout(id = request.uri),
-              location   = locSeq
+              location   = locSeq,
+              organization  = orgSeq
             )
             Ok(views.html.site.facility.add.Main(vv, formForFacilityAdd))
          }
@@ -148,7 +155,7 @@ class FacilityController @javax.inject.Inject()(
         },
        form   => {
          for {
-            _ <- facilityDao.update(id, form.locationId,form.name, form.address, form.description)
+            _ <- facilityDao.update(id,form.organizationId, form.locationId,form.name, form.address, form.description)
           } yield {
             Redirect(routes.FacilityController.show(id))
           }
