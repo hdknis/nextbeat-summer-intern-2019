@@ -92,12 +92,12 @@ class FacilityDAO @javax.inject.Inject()(
         .result
   }
 
-  // def filterByOrganizationIds(organization_Id: Organization.Id): Future[Seq[Facility]] =
-  //   db.run {
-  //     slick
-  //       .filter(_.organizationId === organization_Id)
-  //       .result
-  // }
+  def filterByOrganizationIds(organization_Id: Organization.Id): Future[Seq[Facility]] =
+    db.run {
+      slick
+        .filter(_.organizationId === organization_Id)
+        .result
+  }
 
 
   // --[ テーブル定義 ] --------------------------------------------------------

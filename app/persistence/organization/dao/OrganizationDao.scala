@@ -54,7 +54,7 @@ class OrganizationDAO @javax.inject.Inject()(
  /**
    * 施設を編集
    */
-  def update(id: Long, locationId: String,name_kanji: String ,name_hurigana: String ,name_en: String ,address: String) =
+  def update(id: Organization.Id, locationId: String,name_kanji: String ,name_hurigana: String ,name_en: String ,address: String) =
     db.run {
       slick
         .filter(_.id === id)
@@ -91,19 +91,26 @@ class OrganizationDAO @javax.inject.Inject()(
         .result
     }
 
+  def filterByIds(ids: Seq[Organization.Id]): Future[Seq[Organization]] =
+    db.run {
+      slick
+        .filter(_.id inSet ids)
+        .result
+  }
+
   // --[ テーブル定義 ] --------------------------------------------------------
   class OrganizationTable(tag: Tag) extends Table[Organization](tag, "organization") {
 
 
     // Table's columns
     /* @1 */ def id              = column[Organization.Id]    ("id", O.PrimaryKey, O.AutoInc)
-    /* @2 */ def locationId      = column[Location.Id]    ("location_id")
-    /* @3 */ def name_kanji      = column[String]         ("name_kanji")
-    /* @4 */ def name_hurigana   = column[String]         ("name_hurigana")
-    /* @5 */ def name_en         = column[String]         ("name_en")
-    /* @6 */ def address         = column[String]         ("address")
-    /* @7 */ def updatedAt       = column[LocalDateTime]  ("updated_at")
-    /* @8 */ def createdAt       = column[LocalDateTime]  ("created_at")
+    /* @2 */ def locationId      = column[Location.Id]        ("location_id")
+    /* @3 */ def name_kanji      = column[String]             ("name_kanji")
+    /* @4 */ def name_hurigana   = column[String]             ("name_hurigana")
+    /* @5 */ def name_en         = column[String]             ("name_en")
+    /* @6 */ def address         = column[String]             ("address")
+    /* @7 */ def updatedAt       = column[LocalDateTime]      ("updated_at")
+    /* @8 */ def createdAt       = column[LocalDateTime]      ("created_at")
 
     // The * projection of the table
     def * = (

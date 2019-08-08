@@ -40,7 +40,7 @@ case class OrganizationEdit(
 object Organization {
 
   // --[ 管理ID ]---------------------------------------------------------------
-  type Id = Long
+  type Id = Int
 
    // --[ フォーム定義 ]---------------------------------------------------------
   val formForOrganizationAdd = Form(

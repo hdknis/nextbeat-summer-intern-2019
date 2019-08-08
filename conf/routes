@@ -22,11 +22,11 @@ POST   /facility/delete/:id              controllers.facility.FacilityController
 # --[ 組織ページ ]----------------------------------------------------------------
 GET    /organization/list                    controllers.organization.OrganizationController.list
 GET    /organization/add                     controllers.organization.OrganizationController.add
-GET    /organization/edit/:id                controllers.organization.OrganizationController.edit(id: Long)
-GET    /organization/show/:id                controllers.organization.OrganizationController.show(id: Long)
+GET    /organization/edit/:id                controllers.organization.OrganizationController.edit(id: Int)
+GET    /organization/show/:id                controllers.organization.OrganizationController.show(id: Int)
 POST   /organization/create                  controllers.organization.OrganizationController.create
-POST   /organization/update/:id              controllers.organization.OrganizationController.update(id: Long)
-POST   /organization/delete/:id              controllers.organization.OrganizationController.delete(id: Long)
+POST   /organization/update/:id              controllers.organization.OrganizationController.update(id: Int)
+POST   /organization/delete/:id              controllers.organization.OrganizationController.delete(id: Int)
 
 # --[ 特集ページ ]--------------------------------------------------------------
 GET  /recruit/intership-for-summer-21  controllers.recruit.InternshipForSummer21Controller.view
